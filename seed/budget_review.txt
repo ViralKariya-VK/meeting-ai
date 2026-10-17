@@ -1,0 +1,17 @@
+[00:00:03] Sarah: Welcome everyone. We have the quarterly budget review today.
+[00:00:15] David: Spending on cloud hosting went up by twelve percent this quarter. The main reason was the extra staging environments.
+[00:00:40] Elena: I think we can shut down two of those environments. They aren't used much anymore.
+[00:01:00] Sarah: Okay, let's go with that. We will cancel the two unused staging environments.
+[00:01:22] David: I'll send the updated cost sheet to finance by the 15th.
+[00:01:38] Sarah: Thanks David. Who is handling the vendor contract renewal?
+[00:01:50] Elena: I can take it. I'll contact the vendor and get a second quote by next Tuesday.
+[00:02:20] Omar: The first quote seemed high, but I haven't compared it carefully yet.
+[00:02:41] Sarah: What did we agree on hiring last quarter?
+[00:02:52] David: We approved two more engineers, but only one has been hired so far.
+[00:03:15] Sarah: The decision is to freeze the second hire until January.
+[00:03:40] Omar: We should probably review the travel budget at some point.
+[00:03:58] Sarah: Omar, please prepare a travel budget summary before the next meeting.
+[00:04:20] Omar: Understood.
+[00:04:45] Elena: Rahul didn't get a chance to look at the licence costs yet.
+[00:05:00] Sarah: Let's have Elena and David review the licence costs together by end of the month.
+[00:05:30] Sarah: Alright, budget approved at fifty thousand dollars for next quarter. Thanks all.

@@ -1,0 +1,49 @@
+sentence,label
+"Okay so Priya, can you get the revised numbers over to finance by Thursday?",ACTION_ITEM
+"I'll set up the call with the vendor and send everyone the invite.",ACTION_ITEM
+"Mark is going to look into the memory leak before the release.",ACTION_ITEM
+"We need someone to own the migration plan, and Sarah said she'd take it.",ACTION_ITEM
+"Let's make sure the slides are shared with the client by Monday morning.",ACTION_ITEM
+"Elena will follow up with legal about the NDA this week.",ACTION_ITEM
+"Can you please update the roadmap page before tomorrow's review?",ACTION_ITEM
+"I'll write up the notes and circulate them after the call.",ACTION_ITEM
+"Omar, I'd like you to draft the proposal by next Wednesday.",ACTION_ITEM
+"John agreed to test the new build on Android over the weekend.",ACTION_ITEM
+"Action for Meera: collect the survey responses by the 20th.",ACTION_ITEM
+"Someone has to contact the printer today, I'll do it.",ACTION_ITEM
+"After some back and forth, we settled on shipping the smaller feature set first.",DECISION
+"So the decision is we stay with the current vendor for another year.",DECISION
+"Okay, we're going with the quarterly planning cycle.",DECISION
+"We agreed not to extend the beta beyond the end of the month.",DECISION
+"The board approved the new hiring plan yesterday.",DECISION
+"Great, so it's final: the launch moves to the 3rd of December.",DECISION
+"We've decided to drop support for the old API.",DECISION
+"Everyone is on board, so we'll use the new pricing from January.",DECISION
+"Alright, let's lock it in: Option B it is.",DECISION
+"The team voted to keep the weekly standup on Mondays.",DECISION
+"We won't be migrating this year, that's been decided.",DECISION
+"Budget approved at fifty thousand dollars.",DECISION
+"The churn numbers dropped a bit after we changed the onboarding.",DISCUSSION
+"I think the vendor was a little slow responding last month.",DISCUSSION
+"Honestly the first prototype was a mess, but it taught us a lot.",DISCUSSION
+"We could probably look at automating this at some point.",DISCUSSION
+"Sarah mentioned that the budget might be tight next quarter.",DISCUSSION
+"I won't be able to attend the workshop on Friday.",DISCUSSION
+"The demo went fairly well, though the sound kept cutting out.",DISCUSSION
+"That feature has been requested by a few enterprise customers.",DISCUSSION
+"I'm worried the timeline is a bit optimistic given the holidays.",DISCUSSION
+"Last sprint we completed twenty-two story points.",DISCUSSION
+"Rahul didn't get a chance to look at the report yet.",DISCUSSION
+"It might be worth revisiting the pricing sometime next year.",DISCUSSION
+"Does anyone know who is handling the vendor contract?",QUESTION
+"Wait, when exactly is the client presentation?",QUESTION
+"Are we confident the migration can finish before the freeze?",QUESTION
+"What happened with the payment failures last week?",QUESTION
+"Could we maybe go through the budget numbers again?",QUESTION
+"Is Ananya still blocked on the access request?",QUESTION
+"How many users did we onboard in September?",QUESTION
+"Who's taking notes today?",QUESTION
+"Why was the deadline moved?",QUESTION
+"Do we have a decision on the logo yet?",QUESTION
+"Can someone remind me what we agreed on pricing?",QUESTION
+"Shall we review the open tickets first?",QUESTION

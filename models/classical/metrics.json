@@ -1,0 +1,171 @@
+{
+  "synthetic_holdout": {
+    "n": 208,
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "brier": 0.0011,
+    "fallback_rate_at_thresholds": 0.0,
+    "accuracy_when_confident": 1.0,
+    "accuracy_when_routed": null,
+    "confusion_matrix": {
+      "labels": [
+        "ACTION_ITEM",
+        "DECISION",
+        "DISCUSSION",
+        "QUESTION"
+      ],
+      "matrix": [
+        [
+          52,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          52,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          52,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          52
+        ]
+      ]
+    },
+    "report": {
+      "ACTION_ITEM": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 52.0
+      },
+      "DECISION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 52.0
+      },
+      "DISCUSSION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 52.0
+      },
+      "QUESTION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 52.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 208.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 208.0
+      }
+    }
+  },
+  "thresholds": {
+    "conf_min": 0.8,
+    "margin_min": 0.15
+  },
+  "note": "Trained on template-generated synthetic data; hand_labelled_test is never trained on.",
+  "hand_written_test": {
+    "n": 48,
+    "accuracy": 0.9167,
+    "macro_f1": 0.9178,
+    "brier": 0.1213,
+    "fallback_rate_at_thresholds": 0.1042,
+    "accuracy_when_confident": 0.9302,
+    "accuracy_when_routed": 0.8,
+    "confusion_matrix": {
+      "labels": [
+        "ACTION_ITEM",
+        "DECISION",
+        "DISCUSSION",
+        "QUESTION"
+      ],
+      "matrix": [
+        [
+          11,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          11,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          12,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          10
+        ]
+      ]
+    },
+    "report": {
+      "ACTION_ITEM": {
+        "precision": 1.0,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9565217391304348,
+        "support": 12.0
+      },
+      "DECISION": {
+        "precision": 0.9166666666666666,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9166666666666666,
+        "support": 12.0
+      },
+      "DISCUSSION": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1-score": 0.8888888888888888,
+        "support": 12.0
+      },
+      "QUESTION": {
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.9090909090909091,
+        "support": 12.0
+      },
+      "accuracy": 0.9166666666666666,
+      "macro avg": {
+        "precision": 0.9291666666666667,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9177920509442249,
+        "support": 48.0
+      },
+      "weighted avg": {
+        "precision": 0.9291666666666667,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9177920509442248,
+        "support": 48.0
+      }
+    }
+  }
+}

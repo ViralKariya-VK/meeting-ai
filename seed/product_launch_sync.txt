@@ -1,0 +1,21 @@
+[00:00:05] Rahul: Okay, let's get started. Today is about the launch plan for the mobile app.
+[00:00:21] Ananya: The beta feedback has been mostly positive. Users like the new onboarding flow, but a few people found the settings page confusing.
+[00:00:48] Rahul: Good to know. What is the current status of the payment integration?
+[00:01:02] Mark: The sandbox tests passed last week. I think we still have two edge cases around refunds.
+[00:01:25] Rahul: Can you fix those refund cases by Friday, Mark?
+[00:01:31] Mark: Yes, I'll fix the refund cases by Friday.
+[00:01:50] Ananya: We also need release notes. Priya will draft the release notes by Wednesday.
+[00:02:10] Priya: Sure, I'll share the draft with everyone on Wednesday afternoon.
+[00:02:35] Rahul: Now the big question. Do we launch on the first of November or push to December?
+[00:03:01] Ananya: The marketing team prefers November, but the vendor audit might not be finished by then.
+[00:03:30] Mark: I'm worried about the audit. Honestly it could slip.
+[00:03:52] Rahul: Okay, we have decided to launch the beta on 1 November and revisit if the audit slips.
+[00:04:20] Ananya: Great. Someone should contact the vendor about the audit timeline.
+[00:04:34] Rahul: Ananya, please contact the vendor about the audit timeline tomorrow.
+[00:04:49] Ananya: Will do.
+[00:05:10] Priya: Should we also update the pricing page?
+[00:05:20] Rahul: Maybe we can look at the pricing page sometime next month.
+[00:05:45] Mark: Rahul will probably finish the analytics dashboard soon, unless the API work slips.
+[00:06:10] Rahul: Yes, I'll try to wrap up the dashboard, but it depends on the API team.
+[00:06:40] Ananya: One more thing. We agreed to keep the weekly standup on Mondays.
+[00:06:55] Rahul: Right. Thanks everyone, that's all for today.

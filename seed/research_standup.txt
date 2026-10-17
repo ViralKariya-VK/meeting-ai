@@ -1,0 +1,15 @@
+[00:00:04] Meera: Morning everyone. Quick standup on the NLP project.
+[00:00:15] John: I finished the data cleaning script yesterday. The corpus now has about eight thousand sentences.
+[00:00:35] Lisa: The first baseline reached seventy percent accuracy. Naive Bayes was faster than I expected.
+[00:00:58] Meera: How does it handle negation? For example, "I will not send the report".
+[00:01:15] Lisa: Not well. It confuses refusals with commitments sometimes.
+[00:01:35] Meera: We should send ambiguous sentences to the language model instead of trusting the classifier.
+[00:01:55] John: Agreed. We will use a confidence threshold of point eight for now and tune it later.
+[00:02:20] Meera: Lisa, can you label two hundred more sentences by Thursday?
+[00:02:30] Lisa: Sure, I'll label them by Thursday.
+[00:02:50] John: I will update the evaluation notebook tomorrow with the calibration plots.
+[00:03:10] Meera: Does anyone know when the report is due?
+[00:03:20] Lisa: The deadline is the twentieth of October, I believe.
+[00:03:40] Meera: Okay. John and Lisa will prepare the slides together before the next meeting.
+[00:04:05] John: I think the demo is more convincing than the slides, honestly.
+[00:04:20] Meera: Good point. Let's keep both. That's all for today.
