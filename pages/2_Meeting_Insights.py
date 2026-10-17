@@ -130,6 +130,8 @@ with tab_pipe:
                  f"rejected by LLM: {stats['llm_rejected']} · summary: {stats['summary_method']} · {stats['elapsed_s']}s")
         st.caption(f"Thresholds: confidence ≥ {cfg['conf_min']}, margin ≥ {cfg['margin_min']} · "
                    f"LLM: {cfg['llm_model'] or 'not used'}")
+        for err in stats.get("llm_errors", []):
+            st.error(f"LLM error: {err}")
         fr = stats.get("fallback_reasons", {})
         if fr:
             df = pd.DataFrame({"reason": list(fr), "count": list(fr.values())})

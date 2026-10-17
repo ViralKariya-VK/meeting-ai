@@ -130,3 +130,54 @@ def test_password_check(monkeypatch):
 
 def test_json_extraction_helper():
     assert llm_service._extract_json('noise {"a": 1} tail') == {"a": 1}
+
+
+def test_llm_falls_back_to_other_model_and_non_json_mode(monkeypatch):
+    from types import SimpleNamespace
+
+    calls = []
+
+    class Err(Exception):
+        status_code = 404
+
+    def create(**kw):
+        calls.append((kw["model"], "response_format" in kw))
+        if kw["model"] == "bad-model":
+            raise Err("model_not_found")
+        if "response_format" in kw:
+            raise type("BadRequestError", (Exception,), {"status_code": 400})("json_validate_failed")
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content='{"answer": "ok", "supported": true, "citations": []}'))])
+
+    fake = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    monkeypatch.setattr(llm_service, "get_client", lambda: fake)
+    monkeypatch.setattr(llm_service, "_MIN_INTERVAL", 0)
+    monkeypatch.setenv("GROQ_LLM_MODEL", "bad-model")
+    llm_service._working.clear()
+    out = llm_service.chat_json("sys", "user", QAAnswer)
+    assert out.answer == "ok" and llm_service._working["model"] == "llama-3.1-8b-instant"
+    assert calls[0][0] == "bad-model" and calls[-1] == ("llama-3.1-8b-instant", False)
+    llm_service._working.clear()
+
+
+def test_all_models_failing_reports_every_error(monkeypatch):
+    from types import SimpleNamespace
+
+    def create(**kw):
+        raise type("AuthenticationError", (Exception,), {"status_code": 401})("invalid key")
+
+    fake = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    monkeypatch.setattr(llm_service, "get_client", lambda: fake)
+    monkeypatch.setattr(llm_service, "_MIN_INTERVAL", 0)
+    with pytest.raises(llm_service.LLMUnavailable, match="AuthenticationError"):
+        llm_service.chat_text("s", "u")
+    assert llm_service.last_error and "invalid key" in llm_service.last_error
+
+
+def test_extractive_summary_skips_questions_and_reactions():
+    sents = [{"text": t, "speaker": None} for t in [
+        "Does anyone have any idea what's going on?", "I think that's a great idea.",
+        "A lot of students are skipping on Fridays and absences are rising.",
+        "He has missed seven days already and it is only November.",
+        "We should put up posters with tips for not getting sick this flu season."]]
+    out = pipeline._extractive_summary(sents)
+    assert "?" not in out and "great idea" not in out and "Fridays" in out

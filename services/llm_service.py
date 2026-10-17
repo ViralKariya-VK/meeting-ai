@@ -18,6 +18,10 @@ class LLMUnavailable(Exception):
     """No API key, or Groq could not be reached after retries."""
 
 
+_MODEL_FALLBACKS = ["llama-3.1-8b-instant", "openai/gpt-oss-20b"]
+_working: dict = {}          # remembers the model that last worked
+last_error: Optional[str] = None  # most recent failure text, surfaced in the UI for debugging
+
 _lock = threading.Lock()
 _last_call = 0.0
 _MIN_INTERVAL = 1.0  # seconds between calls: crude token bucket for the free tier
@@ -52,7 +56,34 @@ def _throttle() -> None:
         _last_call = time.time()
 
 
-def _with_retry(fn, attempts: int = 4):
+def candidate_models() -> list[str]:
+    first = [_working["model"]] if _working.get("model") else []
+    return list(dict.fromkeys(first + [config.LLM_MODEL()] + _MODEL_FALLBACKS))
+
+
+def _complete(messages: list[dict], max_tokens: int, temperature: float, json_mode: bool) -> str:
+    """Try the configured model, then fall back to other models and to non-JSON mode, so a
+    deprecated/blocked model or a JSON-mode quirk degrades gracefully instead of failing every call."""
+    global last_error
+    client = get_client()
+    errors: list[str] = []
+    for model in candidate_models():
+        for use_json in ([True, False] if json_mode else [False]):
+            kwargs = dict(model=model, messages=messages, max_tokens=max_tokens, temperature=temperature)
+            if use_json:
+                kwargs["response_format"] = {"type": "json_object"}
+            try:
+                text = _with_retry(lambda: client.chat.completions.create(**kwargs).choices[0].message.content or "")
+                _working["model"] = model
+                last_error = None
+                return text.strip()
+            except LLMUnavailable as e:
+                errors.append(f"[{model}{' json' if use_json else ''}] {e}")
+    last_error = " | ".join(errors)[-700:]
+    raise LLMUnavailable(last_error)
+
+
+def _with_retry(fn, attempts: int = 3):
     delay = 2.0
     last: Exception | None = None
     for _ in range(attempts):
@@ -77,17 +108,8 @@ def _with_retry(fn, attempts: int = 4):
 def chat_text(system: str, user: str, max_tokens: int = 700, temperature: float = 0.2) -> str:
     if _budget_hook:
         _budget_hook(1)
-    client = get_client()
-
-    def call():
-        r = client.chat.completions.create(
-            model=config.LLM_MODEL(),
-            messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-            max_tokens=max_tokens, temperature=temperature,
-        )
-        return (r.choices[0].message.content or "").strip()
-
-    return _with_retry(call)
+    return _complete([{"role": "system", "content": system}, {"role": "user", "content": user}],
+                     max_tokens, temperature, json_mode=False)
 
 
 def _extract_json(text: str) -> dict:
@@ -105,30 +127,16 @@ def chat_json(system: str, user: str, schema: Type[T], max_tokens: int = 600) ->
     """JSON-mode call validated against a pydantic schema. One repair attempt on invalid output."""
     if _budget_hook:
         _budget_hook(1)
-    client = get_client()
     system = system + "\nReply with a single JSON object only."
-
-    def call():
-        r = client.chat.completions.create(
-            model=config.LLM_MODEL(),
-            messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-            max_tokens=max_tokens, temperature=0.0, response_format={"type": "json_object"},
-        )
-        return (r.choices[0].message.content or "").strip()
-
-    raw = _with_retry(call)
+    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
+    raw = _complete(messages, max_tokens, 0.0, json_mode=True)
     for attempt in range(2):
         try:
             return schema.model_validate(_extract_json(raw))
         except (ValidationError, json.JSONDecodeError) as e:
             if attempt == 1:
                 raise LLMUnavailable(f"LLM returned invalid JSON: {str(e)[:150]}") from e
-            raw = _with_retry(lambda: client.chat.completions.create(
-                model=config.LLM_MODEL(),
-                messages=[{"role": "system", "content": system},
-                          {"role": "user", "content": user},
-                          {"role": "assistant", "content": raw},
-                          {"role": "user", "content": f"That was invalid ({str(e)[:200]}). Return corrected JSON only."}],
-                max_tokens=max_tokens, temperature=0.0, response_format={"type": "json_object"},
-            ).choices[0].message.content or "")
+            raw = _complete(messages + [{"role": "assistant", "content": raw},
+                                        {"role": "user", "content": f"That was invalid ({str(e)[:200]}). Return corrected JSON only."}],
+                            max_tokens, 0.0, json_mode=True)
     raise LLMUnavailable("unreachable")

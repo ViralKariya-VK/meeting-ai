@@ -26,6 +26,14 @@ with t_cfg:
     st.caption(f"Session usage: {st.session_state.get('n_transcriptions', 0)} transcription(s), "
                f"{st.session_state.get('n_llm_calls', 0)} LLM call(s).")
 
+    st.subheader("Connection test")
+    if st.button("Test Groq LLM", disabled=not llm_service.is_configured()):
+        try:
+            reply = llm_service.chat_text("Reply with the single word OK.", "ping", max_tokens=5)
+            st.success(f"LLM reachable. Model used: {llm_service.candidate_models()[0]} · reply: {reply!r}")
+        except Exception as e:  # show the exact provider error so it can be fixed
+            st.error(f"{type(e).__name__}: {e}")
+
 with t_eval:
     metrics = classical_nlp.load_metrics()
     if not metrics:

@@ -122,20 +122,28 @@ def summarize(sentences: list[dict], use_llm: bool) -> tuple[str, str]:
     return _extractive_summary(sentences), "extractive"
 
 
+_BACKCHANNEL = re.compile(r"^(?:i think that's|great|thanks|thank you|okay|ok|sure|yes|right|good|that's)\b", re.I)
+
+
 def _extractive_summary(sentences: list[dict], n: int = 5) -> str:
+    """Fallback when no LLM is available: central, informative statements (no questions or reactions)."""
     from sklearn.feature_extraction.text import TfidfVectorizer
     import numpy as np
 
-    texts = [s["text"] for s in sentences if len(s["text"].split()) >= 5]
-    if not texts:
+    pool = [s["text"] for s in sentences
+            if 8 <= len(s["text"].split()) <= 40 and not s["text"].rstrip().endswith("?")
+            and not _BACKCHANNEL.match(s["text"].strip())]
+    if not pool:
         return "No summary available."
-    if len(texts) <= n:
-        return "\n".join(f"- {t}" for t in texts)
-    X = TfidfVectorizer(stop_words="english").fit_transform(texts)
+    if len(pool) <= n:
+        return "\n".join(f"- {t}" for t in pool)
+    X = TfidfVectorizer(stop_words="english").fit_transform(pool)
     centroid = np.asarray(X.mean(axis=0))
     scores = np.asarray(X @ centroid.T).ravel()
+    for i, t in enumerate(pool):  # prefer concrete statements: numbers, names, commitments
+        scores[i] += 0.05 * bool(re.search(r"\d", t)) + 0.05 * bool(re.search(r"\b[A-Z][a-z]{2,}\b", t[1:]))
     top = sorted(np.argsort(scores)[::-1][:n])
-    return "\n".join(f"- {texts[i]}" for i in top)
+    return "\n".join(f"- {pool[i]}" for i in top)
 
 
 def analyze_meeting(meeting_id: int, use_llm: bool = True,
@@ -177,6 +185,9 @@ def analyze_meeting(meeting_id: int, use_llm: bool = True,
                 continue
             except llm_service.LLMUnavailable as e:
                 stats["llm_failures"] += 1
+                stats.setdefault("llm_errors", [])
+                if str(e)[:300] not in stats["llm_errors"] and len(stats["llm_errors"]) < 3:
+                    stats["llm_errors"].append(str(e)[:300])
                 c.notes.append(f"LLM unavailable: {str(e)[:80]}")
                 if "limit" in str(e).lower():
                     llm_ok = False
